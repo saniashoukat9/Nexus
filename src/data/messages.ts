@@ -1,7 +1,7 @@
 import { Message, ChatConversation } from '../types';
 
 export const messages: Message[] = [
-  // Conversation between Sarah (e1) and Michael (i1)
+  // Conversation between Sarah (e1) and Michael (i1)sania changed
   {
     id: 'm1',
     senderId: 'e1',
