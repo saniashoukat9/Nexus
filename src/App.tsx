@@ -1,7 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
-
+import { MeetingsPage } from './pages/meetings/MeetingsPage';
+import { VideoCallPage } from './pages/videocall/VideoCallPage';
+import { PaymentsPage } from './pages/payments/PaymentsPage';
 // Layouts
 import { DashboardLayout } from './components/layout/DashboardLayout';
 
@@ -67,6 +69,12 @@ function App() {
           <Route path="/notifications" element={<DashboardLayout />}>
             <Route index element={<NotificationsPage />} />
           </Route>
+          <Route path="/videocall" element={<DashboardLayout />}>
+  <Route index element={<VideoCallPage />} />
+</Route>
+<Route path="/payments" element={<DashboardLayout />}>
+  <Route index element={<PaymentsPage />} />
+</Route>
           
           <Route path="/documents" element={<DashboardLayout />}>
             <Route index element={<DocumentsPage />} />
@@ -79,7 +87,9 @@ function App() {
           <Route path="/help" element={<DashboardLayout />}>
             <Route index element={<HelpPage />} />
           </Route>
-          
+          <Route path="/meetings" element={<DashboardLayout />}>
+          <Route index element={<MeetingsPage />} />
+          </Route>
           <Route path="/deals" element={<DashboardLayout />}>
             <Route index element={<DealsPage />} />
           </Route>

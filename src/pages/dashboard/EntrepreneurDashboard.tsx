@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Users, Bell, Calendar, TrendingUp, AlertCircle, PlusCircle } from 'lucide-react';
+import { Users, Bell, Calendar, TrendingUp, AlertCircle, PlusCircle, Wallet } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { Card, CardBody, CardHeader } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
@@ -15,45 +15,58 @@ export const EntrepreneurDashboard: React.FC = () => {
   const { user } = useAuth();
   const [collaborationRequests, setCollaborationRequests] = useState<CollaborationRequest[]>([]);
   const [recommendedInvestors, setRecommendedInvestors] = useState(investors.slice(0, 3));
-  
+
   useEffect(() => {
     if (user) {
-      // Load collaboration requests
       const requests = getRequestsForEntrepreneur(user.id);
       setCollaborationRequests(requests);
     }
   }, [user]);
-  
+
   const handleRequestStatusUpdate = (requestId: string, status: 'accepted' | 'rejected') => {
-    setCollaborationRequests(prevRequests => 
-      prevRequests.map(req => 
+    setCollaborationRequests(prevRequests =>
+      prevRequests.map(req =>
         req.id === requestId ? { ...req, status } : req
       )
     );
   };
-  
+
   if (!user) return null;
-  
+
   const pendingRequests = collaborationRequests.filter(req => req.status === 'pending');
-  
+
   return (
     <div className="space-y-6 animate-fade-in">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-3">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Welcome, {user.name}</h1>
           <p className="text-gray-600">Here's what's happening with your startup today</p>
         </div>
-        
         <Link to="/investors">
-          <Button
-            leftIcon={<PlusCircle size={18} />}
-          >
-            Find Investors
-          </Button>
+          <Button leftIcon={<PlusCircle size={18} />}>Find Investors</Button>
         </Link>
       </div>
-      
-      {/* Summary cards */}
+
+      {/* Wallet Balance Banner */}
+      <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl p-5 text-white flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="flex items-center gap-4">
+          <div className="p-3 bg-white bg-opacity-20 rounded-xl">
+            <Wallet size={24} className="text-white" />
+          </div>
+          <div>
+            <p className="text-sm opacity-80">Wallet Balance</p>
+            <p className="text-3xl font-bold">$147,000</p>
+            <p className="text-xs opacity-60 mt-0.5">Last updated: {new Date().toLocaleDateString()}</p>
+          </div>
+        </div>
+        <Link to="/payments">
+          <button className="bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-5 py-2.5 rounded-xl text-sm font-medium transition w-full sm:w-auto text-center">
+            Manage Payments →
+          </button>
+        </Link>
+      </div>
+
+      {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card className="bg-primary-50 border border-primary-100">
           <CardBody>
@@ -68,7 +81,7 @@ export const EntrepreneurDashboard: React.FC = () => {
             </div>
           </CardBody>
         </Card>
-        
+
         <Card className="bg-secondary-50 border border-secondary-100">
           <CardBody>
             <div className="flex items-center">
@@ -84,7 +97,7 @@ export const EntrepreneurDashboard: React.FC = () => {
             </div>
           </CardBody>
         </Card>
-        
+
         <Card className="bg-accent-50 border border-accent-100">
           <CardBody>
             <div className="flex items-center">
@@ -98,7 +111,7 @@ export const EntrepreneurDashboard: React.FC = () => {
             </div>
           </CardBody>
         </Card>
-        
+
         <Card className="bg-success-50 border border-success-100">
           <CardBody>
             <div className="flex items-center">
@@ -113,16 +126,15 @@ export const EntrepreneurDashboard: React.FC = () => {
           </CardBody>
         </Card>
       </div>
-      
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Collaboration requests */}
+        {/* Collaboration Requests */}
         <div className="lg:col-span-2 space-y-4">
           <Card>
             <CardHeader className="flex justify-between items-center">
               <h2 className="text-lg font-medium text-gray-900">Collaboration Requests</h2>
               <Badge variant="primary">{pendingRequests.length} pending</Badge>
             </CardHeader>
-            
             <CardBody>
               {collaborationRequests.length > 0 ? (
                 <div className="space-y-4">
@@ -140,14 +152,16 @@ export const EntrepreneurDashboard: React.FC = () => {
                     <AlertCircle size={24} className="text-gray-500" />
                   </div>
                   <p className="text-gray-600">No collaboration requests yet</p>
-                  <p className="text-sm text-gray-500 mt-1">When investors are interested in your startup, their requests will appear here</p>
+                  <p className="text-sm text-gray-500 mt-1">
+                    When investors are interested in your startup, their requests will appear here
+                  </p>
                 </div>
               )}
             </CardBody>
           </Card>
         </div>
-        
-        {/* Recommended investors */}
+
+        {/* Recommended Investors */}
         <div className="space-y-4">
           <Card>
             <CardHeader className="flex justify-between items-center">
@@ -156,14 +170,9 @@ export const EntrepreneurDashboard: React.FC = () => {
                 View all
               </Link>
             </CardHeader>
-            
             <CardBody className="space-y-4">
               {recommendedInvestors.map(investor => (
-                <InvestorCard
-                  key={investor.id}
-                  investor={investor}
-                  showActions={false}
-                />
+                <InvestorCard key={investor.id} investor={investor} showActions={false} />
               ))}
             </CardBody>
           </Card>

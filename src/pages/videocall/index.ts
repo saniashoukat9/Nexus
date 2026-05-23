@@ -1,0 +1,1 @@
+export { VideoCallPage } from './VideoCallPage';
